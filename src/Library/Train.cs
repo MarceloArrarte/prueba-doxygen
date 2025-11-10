@@ -10,7 +10,7 @@ namespace ClassLibrary
 {
 
     /// <summary>
-    /// Esta clase representa un tren muy básico.
+    /// Esta clase representa un tren muy básico. La idea es probar si se actualizan las docs...
     /// </summary>
     public class Train
     {
