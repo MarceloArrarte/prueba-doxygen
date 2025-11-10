@@ -42,18 +42,28 @@ jobs:
         continue-on-error: false
 
       - name: Commit and push generated docs
-        working-directory: docs
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Guardar los HTML generados temporalmente
+          mkdir -p /tmp/docs
+          cp -r docs/html/* /tmp/docs/
+
+          # Cambiar a la raíz del repo
+          cd $GITHUB_WORKSPACE
+
+          # Cambiar a la rama gh-pages (o crearla si no existe)
+          git fetch origin gh-pages || true
+          git switch -c gh-pages origin/gh-pages || git checkout --orphan gh-pages
+
+          # Limpiar todo y copiar los nuevos docs
+          rm -rf ./*
+          cp -r /tmp/docs/* .
+
+          # Commit y push
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin gh-pages
-          git stash --include-untracked
-          git checkout gh-pages
-          git stash pop || true
-          git pull
           git add .
           git commit -m "Update Doxygen docs [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages
