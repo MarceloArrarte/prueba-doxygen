@@ -10,7 +10,7 @@ namespace ClassLibrary
 {
 
     /// <summary>
-    /// Esta clase representa un tren muy básico. Se actualizaron los docs solitos???
+    /// Esta clase representa un tren muy básico. newnfcuiefierhuihui
     /// </summary>
     public class Train
     {
