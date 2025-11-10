@@ -46,21 +46,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Guardar los HTML generados temporalmente
-          mkdir -p /tmp/docs
-          cp -r docs/html/* /tmp/docs/
-
-          # Cambiar a la raíz del repo
-          cd $GITHUB_WORKSPACE
-
-          # Cambiar a la rama gh-pages (o crearla si no existe)
+          git stash --include-untracked
           git fetch origin gh-pages || true
-          git switch -c gh-pages origin/gh-pages || git checkout --orphan gh-pages
-          git pull || true
+          git checkout gh-pages
 
           # Limpiar todo y copiar los nuevos docs
           rm -rf docs/html/*
-          cp -r /tmp/docs/* docs/html/*
+          git stash pop
 
           # Commit y push
           git config user.name "github-actions[bot]"
