@@ -49,6 +49,7 @@ jobs:
           git stash --include-untracked
           git fetch origin gh-pages || true
           git checkout gh-pages
+          dotnet build    # Modifica el Library.xml
 
           # Limpiar todo y copiar los nuevos docs
           rm -rf docs/html/*
