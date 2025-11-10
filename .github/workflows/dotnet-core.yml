@@ -46,14 +46,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          dotnet build    # Modifica el Library.xml
           git stash --include-untracked
           git fetch origin gh-pages || true
           git checkout gh-pages
-          dotnet build    # Modifica el Library.xml
 
           # Limpiar todo y copiar los nuevos docs
           rm -rf docs/html/*
-          git stash pop
+          git stash pop || (
+            git checkout --theirs . &&
+            git add . &&
+            echo "Conflicts resolved in favor of stash"
+          )
 
           # Commit y push
           git config user.name "github-actions[bot]"
