@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   build-test-generate-docs:
     runs-on: ubuntu-latest
@@ -41,6 +44,8 @@ jobs:
       - name: Commit and push generated docs
         working-directory: docs
         if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -48,4 +53,5 @@ jobs:
           git switch gh-pages || git checkout --orphan gh-pages
           git add .
           git commit -m "Update Doxygen docs [skip ci]" || echo "No changes to commit"
-          git push origin gh-pages
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages
+
