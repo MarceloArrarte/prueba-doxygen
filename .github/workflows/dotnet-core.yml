@@ -56,10 +56,11 @@ jobs:
           # Cambiar a la rama gh-pages (o crearla si no existe)
           git fetch origin gh-pages || true
           git switch -c gh-pages origin/gh-pages || git checkout --orphan gh-pages
+          git pull || true
 
           # Limpiar todo y copiar los nuevos docs
-          rm -rf ./*
-          cp -r /tmp/docs/* .
+          rm -rf docs/html/*
+          cp -r /tmp/docs/* docs/html/*
 
           # Commit y push
           git config user.name "github-actions[bot]"
